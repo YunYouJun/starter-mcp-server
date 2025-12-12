@@ -1,0 +1,71 @@
+{
+  "name": "starter-mcp-server",
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.25.0",
+  "description": "Starter for MCP Server",
+  "author": "YunYouJun",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/YunYouJun",
+  "homepage": "https://github.com/YunYouJun/starter-mcp-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YunYouJun/starter-mcp-server.git"
+  },
+  "bugs": "https://github.com/YunYouJun/starter-mcp-server/issues",
+  "keywords": [
+    "mcp",
+    "server",
+    "starter"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "eslint",
+    "prepublishOnly": "nr build",
+    "release": "bumpp",
+    "start": "tsx src/index.ts",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "catalog:cli",
+    "zod": "catalog:cli"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:cli",
+    "@antfu/ni": "catalog:cli",
+    "@antfu/utils": "catalog:inlined",
+    "@types/node": "catalog:types",
+    "bumpp": "catalog:cli",
+    "eslint": "catalog:cli",
+    "lint-staged": "catalog:cli",
+    "simple-git-hooks": "catalog:cli",
+    "tinyexec": "catalog:testing",
+    "tsdown": "catalog:cli",
+    "tsx": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vite": "catalog:cli",
+    "vitest": "catalog:testing",
+    "vitest-package-exports": "catalog:testing",
+    "yaml": "catalog:testing"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
