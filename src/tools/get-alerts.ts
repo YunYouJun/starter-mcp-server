@@ -1,8 +1,6 @@
-import type { AlertsResponse } from '../types'
 import { z } from 'zod'
-import { NWS_API_BASE } from '../constants'
+import { getAlerts } from '../lib/weather'
 import { server } from '../server'
-import { formatAlert, makeNWSRequest } from '../utils'
 
 export function registerGetAlerts() {
   server.registerTool(
@@ -15,43 +13,26 @@ export function registerGetAlerts() {
       }),
     },
     async ({ state }) => {
-      const stateCode = state.toUpperCase()
-      const alertsUrl = `${NWS_API_BASE}/alerts?area=${stateCode}`
-      const alertsData = await makeNWSRequest<AlertsResponse>(alertsUrl)
-
-      if (!alertsData) {
+      try {
+        const result = await getAlerts(state)
         return {
           content: [
             {
               type: 'text',
-              text: 'Failed to retrieve alerts data',
+              text: result.message,
             },
           ],
         }
       }
-
-      const features = alertsData.features || []
-      if (features.length === 0) {
+      catch (error) {
         return {
           content: [
             {
               type: 'text',
-              text: `No active alerts for ${stateCode}`,
+              text: error instanceof Error ? error.message : 'Failed to retrieve alerts data',
             },
           ],
         }
-      }
-
-      const formattedAlerts = features.map(formatAlert)
-      const alertsText = `Active alerts for ${stateCode}:\n\n${formattedAlerts.join('\n')}`
-
-      return {
-        content: [
-          {
-            type: 'text',
-            text: alertsText,
-          },
-        ],
       }
     },
   )

@@ -2,7 +2,7 @@
   "name": "starter-mcp-server",
   "type": "module",
   "version": "0.1.0",
-  "packageManager": "pnpm@10.25.0",
+  "packageManager": "pnpm@10.32.0",
   "description": "Starter for MCP Server",
   "author": "YunYouJun",
   "license": "MIT",
@@ -21,11 +21,16 @@
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.mjs",
+    "./cli": "./dist/cli.mjs",
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
+  "bin": {
+    "starter-mcp-server": "./bin/index.mjs",
+    "starter": "./bin/index.mjs"
+  },
   "files": [
     "dist"
   ],
@@ -38,10 +43,18 @@
     "start": "tsx src/index.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "cli": "tsx src/cli.ts",
+    "cli:help": "tsx src/cli.ts --help",
+    "cli:alerts": "tsx src/cli.ts get-alerts CA",
+    "cli:forecast": "tsx src/cli.ts get-forecast 39.7456 -97.0892",
+    "demo": "bash examples/cli-demo.sh",
+    "start:prod": "node dist/cli.mjs",
+    "inspector": "pnpx @modelcontextprotocol/inspector node dist/index.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:cli",
+    "yargs": "catalog:",
     "zod": "catalog:cli"
   },
   "devDependencies": {
@@ -49,6 +62,7 @@
     "@antfu/ni": "catalog:cli",
     "@antfu/utils": "catalog:inlined",
     "@types/node": "catalog:types",
+    "@types/yargs": "catalog:",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
     "lint-staged": "catalog:cli",

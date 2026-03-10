@@ -6,6 +6,10 @@ export default antfu(
     type: 'lib',
     pnpm: true,
 
+    ignores: [
+      'pnpm-workspace.yaml',
+    ],
+
     rules: {
       'ts/explicit-function-return-type': 'off',
     },

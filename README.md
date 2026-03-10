@@ -6,50 +6,145 @@
 [![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
 
-_description_
+A modern MCP (Model Context Protocol) server starter template with CLI support.
 
-- [Build an MCP Client](https://modelcontextprotocol.io/docs/develop/build-client)
+## Features
 
-## Dev
+- 🚀 **Dual Mode**: Works as both MCP server and CLI tool
+- 🔧 **Built-in Tools**: Weather alerts and forecasts (NWS API)
+- ♻️ **Code Reuse**: Shared business logic between MCP and CLI
+- 📦 **Type Safe**: Full TypeScript support
+- ✅ **Tested**: Comprehensive test coverage
+- 🎯 **Simple**: Minimal architecture, easy to extend
 
-### Running the Client
+## Quick Start
 
 ```bash
+# Install dependencies
+pnpm install
+
+# Build the project
 pnpm build
 
-# run client
-node dist/index.mjs path/to/build/index.js # node server
+# Run as MCP server (default)
+node dist/cli.mjs
+
+# Or use CLI commands
+node dist/cli.mjs get-alerts CA
+node dist/cli.mjs get-forecast 39.7456 -97.0892
+
+# Quick start with npm scripts
+pnpm cli:help      # Show help
+pnpm cli:alerts    # Example: Get CA alerts
+pnpm cli:forecast  # Example: Get forecast
+pnpm demo          # Run full demo
 ```
 
-### Config MCP Servers
+## CLI Usage
 
-`mcp.json`
+```bash
+# Start MCP server (no arguments)
+node dist/cli.mjs
+
+# Get weather alerts for a state
+node dist/cli.mjs get-alerts CA
+
+# Get weather forecast for a location
+node dist/cli.mjs get-forecast 39.7456 -97.0892
+
+# Show help
+node dist/cli.mjs --help
+```
+
+For detailed CLI documentation, see [CLI_USAGE.md](./CLI_USAGE.md).
+
+## MCP Server Configuration
+
+Add to your MCP client configuration (e.g., Claude Desktop):
 
 ```json
 {
   "mcpServers": {
-    "starter": {
+    "weather": {
       "command": "node",
-      "args": ["/ABSOLUTE/PATH/TO/PARENT/FOLDER/starter/dist/index.mjs"]
+      "args": ["/ABSOLUTE/PATH/TO/starter-mcp-server/dist/index.mjs"]
     }
   }
 }
 ```
 
-### Use MCP Inspector to debug
+Or use via npx:
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "npx",
+      "args": ["-y", "starter-mcp-server@latest"]
+    }
+  }
+}
+```
+
+## Development
 
 ```bash
+# Run tests
+pnpm test
+
+# Type check
+pnpm typecheck
+
+# Lint
+pnpm lint
+
+# Debug with MCP Inspector
 pnpx @modelcontextprotocol/inspector node dist/index.mjs
 ```
 
-### Release
+## Project Structure
+
+```
+src/
+├── lib/
+│   └── weather.ts          # Core business logic
+├── tools/
+│   ├── get-alerts.ts       # MCP tool registration
+│   └── get-forecast.ts
+├── cli.ts                  # CLI entry point
+├── server.ts               # MCP Server instance
+└── index.ts                # MCP Server entry point
+```
+
+## Adding New Tools
+
+See [CLI_USAGE.md](./CLI_USAGE.md) for detailed instructions.
+
+Quick overview:
+1. Add business logic in `src/lib/`
+2. Register MCP tool in `src/tools/`
+3. Add CLI command in `src/cli.ts` (optional)
+4. Update `src/index.ts` to register the tool
+
+## Architecture Analysis
+
+For a detailed analysis of the project architecture and design decisions, see [ARCHITECTURE_ANALYSIS.md](./ARCHITECTURE_ANALYSIS.md).
+
+## Release
 
 ```sh
-# first
+# First release
 pnpm publish
-# future release
+
+# Future releases
 pnpm run release
 ```
+
+## References
+
+- [Build an MCP Server](https://modelcontextprotocol.io/docs/develop/build-server)
+- [Build an MCP Client](https://modelcontextprotocol.io/docs/develop/build-client)
+- [starter-ts](https://github.com/antfu/starter-ts)
 
 <!-- Badges -->
 
@@ -63,8 +158,3 @@ pnpm run release
 [license-href]: https://github.com/YunYouJun/pkg-placeholder/blob/main/LICENSE
 [jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
 [jsdocs-href]: https://www.jsdocs.io/package/pkg-placeholder
-
-## Ref
-
-- [Build an MCP Server](https://modelcontextprotocol.io/docs/develop/build-server)
-- [starter-ts](https://github.com/antfu/starter-ts)
